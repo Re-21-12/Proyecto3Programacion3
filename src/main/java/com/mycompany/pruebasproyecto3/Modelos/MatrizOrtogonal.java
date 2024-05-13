@@ -10,12 +10,14 @@ package com.mycompany.pruebasproyecto3.Modelos;
     */
 public class MatrizOrtogonal {
 
+    private int numeroHoja;
     private NodoLista filas; // Declara una variable privada filas del tipo NodoLista
     private NodoLista columnas; // Declara una variable privada columnas del tipo NodoLista
 
-    public MatrizOrtogonal() { // Constructor de la clase MatrizOrtogonal
-        filas = new NodoLista(); // Inicializa la variable filas con una nueva instancia de NodoLista
-        columnas = new NodoLista(); // Inicializa la variable columnas con una nueva instancia de NodoLista
+    public MatrizOrtogonal(int numeroHoja) { // Constructor de la clase MatrizOrtogonal
+        this.filas = new NodoLista(); // Inicializa la variable filas con una nueva instancia de NodoLista
+        this.columnas = new NodoLista(); // Inicializa la variable columnas con una nueva instancia de NodoLista
+        this.numeroHoja = numeroHoja;
     }
 
     public void insertarEnMatriz(int x, int y, String dato) { // Método para insertar un vehículo en la matriz ortogonal
@@ -71,4 +73,13 @@ public class MatrizOrtogonal {
         columnas.mostrarListaColumna(); // Muestra la lista horizontal de columnas
     }
 
+    public int getNumeroHoja() {
+        return numeroHoja;
+    }
+
+    public void setNumeroHoja(int numeroHoja) {
+        this.numeroHoja = numeroHoja;
+    }
+
+    
 }

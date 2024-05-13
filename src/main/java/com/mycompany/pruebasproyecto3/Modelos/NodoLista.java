@@ -196,7 +196,7 @@ public class NodoLista {
     public void mostrarListaColumna() {
         NodoCoordenada actual = cabeza; // creamos un nodo auxiliar Coordenada lo inicializamos con la cabeza
         while (actual != null) { // mientras no lleguemos al final de la lista
-            System.out.println("|" + actual.getCoordenada() + "|"); // imprimimos el valor del nodo actual
+            System.out.println("|" + actual.getCoordenada()  + "|"); // imprimimos el valor del nodo actual
             actual = actual.getSiguiente(); // avanzamos al siguiente nodo
         }
     }

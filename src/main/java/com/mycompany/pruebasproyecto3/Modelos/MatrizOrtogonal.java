@@ -7,7 +7,7 @@ package com.mycompany.pruebasproyecto3.Modelos;
 /**
  *
  * @author victo
-    */
+ */
 public class MatrizOrtogonal {
 
     private int numeroHoja;
@@ -37,8 +37,10 @@ public class MatrizOrtogonal {
 
         tempFila.getLista().insertar(_nodoOrtogonal); // Inserta el nuevo NodoOrtogonal en la lista horizontal del NodoCoordenada encontrado
         tempColumna.getLista().insertar(_nodoOrtogonal); // Inserta el nuevo NodoOrtogonal en la lista vertical del NodoCoordenada encontrado
-        tempFila.getLista().mostrarLista();
-        tempColumna.getLista().mostrarLista();
+
+        tempFila.getLista().mostrarListaFilaOrtogonal();
+        tempColumna.getLista().mostrarListaColumnaOrtogonal();
+
     }
 
     //falta implementar
@@ -54,6 +56,8 @@ public class MatrizOrtogonal {
         }
         filas.eliminar(tempFila); // Elimina el NodoCoordenada correspondiente de la lista vertical de filas
         columnas.eliminar(tempColumna); // Elimina el NodoCoordenada correspondiente de la lista horizontal de columnas
+        tempFila.getLista().mostrarListaFilaOrtogonal();
+        tempColumna.getLista().mostrarListaColumnaOrtogonal();
     }
 
     public void buscarEnMatriz(int x, int y) { // Método para buscar un vehículo en la matriz ortogonal por sus coordenadas
@@ -67,10 +71,10 @@ public class MatrizOrtogonal {
         }
     }
 
-
     public void mostrarMatriz() { // Método para mostrar la matriz ortogonal
         filas.mostrarListaFila(); // Muestra la lista vertical de filas
         columnas.mostrarListaColumna(); // Muestra la lista horizontal de columnas
+
     }
 
     public int getNumeroHoja() {
@@ -81,5 +85,4 @@ public class MatrizOrtogonal {
         this.numeroHoja = numeroHoja;
     }
 
-    
 }

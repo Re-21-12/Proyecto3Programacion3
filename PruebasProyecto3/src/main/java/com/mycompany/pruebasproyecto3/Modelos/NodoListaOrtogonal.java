@@ -93,10 +93,19 @@ public class NodoListaOrtogonal {
         return cabeza; // Devuelve la cabeza actualizada
     }
 
-    public void mostrarLista() { // Método para mostrar la lista horizontal
+    public void mostrarListaColumnaOrtogonal() {
+        NodoOrtogonal actual = cabeza; // creamos un nodo auxiliar Coordenada lo inicializamos con la cabeza
+        System.out.print("|" + "i" + "|"); // imprimimos el valor del nodo actual
+        while (actual != null) { // mientras no lleguemos al final de la lista
+            System.out.println("|" + actual.getDato()+ "|"); // imprimimos el valor del nodo actual
+            actual = actual.getAbajo(); // avanzamos al siguiente nodo
+        }
+    }
+
+    public void mostrarListaFilaOrtogonal() { // Método para mostrar la lista horizontal
         NodoOrtogonal actual = cabeza; // Inicializa actual como la cabeza
         while (actual != null) { // Itera hasta llegar al final de la lista
-            System.out.print("|" + actual.getX() + "|"); // Imprime el valor del nodo actual
+            System.out.print("|" + actual.getDato()+ "|"); // Imprime el valor del nodo actual
             actual = actual.getDerecha(); // Avanza al siguiente nodo
         }
         System.out.println(); // Imprime un salto de línea al final de la lista

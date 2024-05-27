@@ -15,8 +15,10 @@ public class Ventana {
     private JTextField funcionesField;
     public JButton aplicar;
     public JButton rechazar;
-    public JMenuItem crearHoja, tablaHash, guardar;
+    public JMenuItem crearHoja, tablaHash, guardar,cargar;
     private JLabel hojaActualLabel;
+    private DefaultTableModel modeloHojaSeleccionada;
+    private JTable table;
 
     public Ventana() {
         models = new ArrayList<>();
@@ -50,10 +52,13 @@ public class Ventana {
         crearHoja = new JMenuItem("Nueva Hoja");
         tablaHash = new JMenuItem("Tabla Hash");
         guardar = new JMenuItem("Guardar");
+        cargar = new JMenuItem("Cargar");
 
         menu.add(tablaHash);
         menu.add(crearHoja);
         menu.add(guardar);
+        menu.add(cargar);
+
         barra.add(menu);
         frame.setJMenuBar(barra);
 
@@ -85,6 +90,7 @@ public class Ventana {
         crearHoja.addActionListener(controlador);
         tablaHash.addActionListener(controlador);
         guardar.addActionListener(controlador);
+        cargar.addActionListener(controlador);
     }
 
     public void agregarModelo(DefaultTableModel modelo) {
@@ -102,6 +108,10 @@ public class Ventana {
 
     public int getHojaSeleccionada() {
         return tabbedPane.getSelectedIndex();
+    }
+
+    public void setModeloHojaSeleccionada(DefaultTableModel modelo) {
+        modeloHojaSeleccionada = modelo;
     }
 
     public DefaultTableModel getModeloHojaSeleccionada() {

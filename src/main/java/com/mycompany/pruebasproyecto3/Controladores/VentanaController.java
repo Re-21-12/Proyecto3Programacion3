@@ -1,6 +1,7 @@
 package com.mycompany.pruebasproyecto3.Controladores;
 
 import com.mycompany.pruebasproyecto3.Modelos.MatrizOrtogonal;
+import com.mycompany.pruebasproyecto3.Modelos.TablaHash;
 import com.mycompany.pruebasproyecto3.Modelos.NodoOrtogonal;
 import com.mycompany.pruebasproyecto3.Vista.Ventana;
 
@@ -9,7 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
+import java.io.*;
+
 
 public class VentanaController implements ActionListener {
 
@@ -45,8 +48,91 @@ public class VentanaController implements ActionListener {
         } else if (e.getSource() == vista.rechazar) {
             vista.limpiarFuncion();
         }
+
+        if (e.getSource() == vista.tablaHash) {
+            generarTablaHash();
+        }
+        if (e.getSource() == vista.guardar) {
+            guardarDatos(rutaArchivo);
+        }
+        if(e.getSource() == vista.)
     }
 
+private void generarTablaHash() {
+    int numero_buckets = solicitarCantidadBuckets();
+    if (numero_buckets > 0) {
+        DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
+        TablaHash tablaHash = new TablaHash(numero_buckets);
+        ArrayList<String> datos = obtenerDatosColumnaB();
+        ArrayList<int[]> coordenadas = new ArrayList<>();
+        tablaHash.llenarListaIndices();
+        tablaHash.hashMethod(datos);
+        coordenadas = tablaHash.mostrarListaIndices(datos);
+        for (int[] coordenada : coordenadas) {
+            modelo.setValueAt(coordenada[2], coordenada[0], (coordenada[1]+2));
+            System.out.println("X: " + (coordenada[0]) + " Y: " + (coordenada[1]+1) + " Dato: " + coordenada[2]);
+        }
+    }
+}
+
+
+    private ArrayList<String> obtenerDatosColumnaB() {
+        DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
+        int rowCount = modelo.getRowCount();
+        ArrayList<String> datos_columnaB = new ArrayList<>();
+
+        for (int i = 0; i < rowCount; i++) {
+            Object valor = modelo.getValueAt(i, 1); // La columna B es el índice 1 (0 para la columna A, 1 para la columna B, etc.)
+
+            if (valor != null) {
+                datos_columnaB.add(valor.toString());
+                //System.out.println("El contenido deberia asignarse a la fila: " + i);
+            }
+        }
+
+        // Ahora puedes usar la lista columnaB para lo que necesites
+        System.out.println("Datos de la columna B: " + datos_columnaB);
+        return datos_columnaB;
+    }
+
+    private int solicitarCantidadBuckets() {
+        String input = JOptionPane.showInputDialog(vista.getFrame(), "Ingrese la cantidad de buckets:", "Cantidad de Buckets", JOptionPane.PLAIN_MESSAGE);
+        try {
+            int numBuckets = Integer.parseInt(input);
+            if (numBuckets <= 0) {
+                throw new NumberFormatException("La cantidad de buckets debe ser mayor que cero.");
+            }
+            return numBuckets;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(vista.getFrame(), "Entrada no válida. Por favor, ingrese un número entero positivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            return -1; // Indica que se ha producido un error
+        }
+    }
+
+        public void cargarDatos(String rutaArchivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
+            Vector dataVector = (Vector) ois.readObject();
+            Vector columnIdentifiers = (Vector) ois.readObject();
+            DefaultTableModel modelo = new DefaultTableModel(dataVector, columnIdentifiers);
+            vista.setModeloHojaSeleccionada(modelo);
+            System.out.println("Datos cargados correctamente desde " + rutaArchivo);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(vista.getFrame(), "Error al cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+      public void guardarDatos(String rutaArchivo) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
+            DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
+            oos.writeObject(modelo.getDataVector()); // Guarda los datos de la tabla
+            System.out.println("Datos guardados correctamente en " + rutaArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(vista.getFrame(), "Error al guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     private MatrizOrtogonal obtenerMatrizOrtogonal() {
         int numeroHoja = vista.getHojaSeleccionada();
         for (MatrizOrtogonal matriz : contenidoHojas) {

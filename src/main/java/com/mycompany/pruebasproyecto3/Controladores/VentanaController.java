@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.io.*;
 
-
 public class VentanaController implements ActionListener {
 
     private Ventana vista;
@@ -53,28 +52,29 @@ public class VentanaController implements ActionListener {
             generarTablaHash();
         }
         if (e.getSource() == vista.guardar) {
-            guardarDatos(rutaArchivo);
+            guardarDatosConDialogo(); // Llamar al método que abre el diálogo para guardar
         }
-        if(e.getSource() == vista.)
-    }
-
-private void generarTablaHash() {
-    int numero_buckets = solicitarCantidadBuckets();
-    if (numero_buckets > 0) {
-        DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
-        TablaHash tablaHash = new TablaHash(numero_buckets);
-        ArrayList<String> datos = obtenerDatosColumnaB();
-        ArrayList<int[]> coordenadas = new ArrayList<>();
-        tablaHash.llenarListaIndices();
-        tablaHash.hashMethod(datos);
-        coordenadas = tablaHash.mostrarListaIndices(datos);
-        for (int[] coordenada : coordenadas) {
-            modelo.setValueAt(coordenada[2], coordenada[0], (coordenada[1]+2));
-            System.out.println("X: " + (coordenada[0]) + " Y: " + (coordenada[1]+1) + " Dato: " + coordenada[2]);
+        if (e.getSource() == vista.cargar) {
+            cargarDatosConDialogo(); // Llamar al método que abre el diálogo para cargar
         }
     }
-}
 
+    private void generarTablaHash() {
+        int numero_buckets = solicitarCantidadBuckets();
+        if (numero_buckets > 0) {
+            DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
+            TablaHash tablaHash = new TablaHash(numero_buckets);
+            ArrayList<String> datos = obtenerDatosColumnaB();
+            ArrayList<int[]> coordenadas = new ArrayList<>();
+            tablaHash.llenarListaIndices();
+            tablaHash.hashMethod(datos);
+            coordenadas = tablaHash.mostrarListaIndices(datos);
+            for (int[] coordenada : coordenadas) {
+                modelo.setValueAt(coordenada[2], coordenada[0], (coordenada[1] + 2));
+                System.out.println("X: " + (coordenada[0]) + " Y: " + (coordenada[1] + 1) + " Dato: " + coordenada[2]);
+            }
+        }
+    }
 
     private ArrayList<String> obtenerDatosColumnaB() {
         DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
@@ -86,11 +86,9 @@ private void generarTablaHash() {
 
             if (valor != null) {
                 datos_columnaB.add(valor.toString());
-                //System.out.println("El contenido deberia asignarse a la fila: " + i);
             }
         }
 
-        // Ahora puedes usar la lista columnaB para lo que necesites
         System.out.println("Datos de la columna B: " + datos_columnaB);
         return datos_columnaB;
     }
@@ -109,30 +107,79 @@ private void generarTablaHash() {
         }
     }
 
-        public void cargarDatos(String rutaArchivo) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
-            Vector dataVector = (Vector) ois.readObject();
-            Vector columnIdentifiers = (Vector) ois.readObject();
-            DefaultTableModel modelo = new DefaultTableModel(dataVector, columnIdentifiers);
-            vista.setModeloHojaSeleccionada(modelo);
+public void cargarDatos(String rutaArchivo) {
+    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
+        Vector dataVector = (Vector) ois.readObject();
+        DefaultTableModel modelo = new DefaultTableModel(dataVector, 0); // Se inicia con 0 columnas
+        int columnCount = dataVector.isEmpty() ? 0 : ((Vector) dataVector.get(0)).size(); // Obtener el número de columnas
+        for (int i = 0; i < columnCount; i++) {
+            modelo.addColumn("Columna " + (i + 1)); // Agregar las columnas al modelo
+        }
+        // Verificar si hay una hoja seleccionada actualmente
+        if (vista.getModeloHojaSeleccionada() != null) {
+            // Crear un nuevo modelo de tabla con los nuevos datos y establecerlo en la vista
+            DefaultTableModel nuevoModelo = new DefaultTableModel(dataVector, columnCount);
+            vista.setModeloHojaSeleccionada(nuevoModelo);
             System.out.println("Datos cargados correctamente desde " + rutaArchivo);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(vista.getFrame(), "Error al cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            System.err.println("Error: No hay una hoja seleccionada para cargar los datos.");
+            JOptionPane.showMessageDialog(vista.getFrame(), "No hay una hoja seleccionada para cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(vista.getFrame(), "Error al cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 
-      public void guardarDatos(String rutaArchivo) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
-            DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
-            oos.writeObject(modelo.getDataVector()); // Guarda los datos de la tabla
-            System.out.println("Datos guardados correctamente en " + rutaArchivo);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(vista.getFrame(), "Error al guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+
+
+
+
+public void guardarDatos(String rutaArchivo) {
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
+        DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
+        int columnCount = modelo.getColumnCount();
+        Vector<String> columnIdentifiers = new Vector<>();
+        for (int i = 0; i < columnCount; i++) {
+            columnIdentifiers.add(modelo.getColumnName(i));
         }
+        oos.writeObject(modelo.getDataVector()); // Guarda los datos de la tabla
+        oos.writeObject(columnIdentifiers); // Guarda los identificadores de columna
+        System.out.println("Datos guardados correctamente en " + rutaArchivo);
+    } catch (IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(vista.getFrame(), "Error al guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-    
+}
+
+
+
+public void guardarDatosConDialogo() {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Guardar archivo");
+    int userSelection = fileChooser.showSaveDialog(vista.getFrame());
+
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+        File fileToSave = fileChooser.getSelectedFile();
+        String rutaArchivo = fileToSave.getAbsolutePath();
+        guardarDatos(rutaArchivo);
+    }
+}
+
+
+public void cargarDatosConDialogo() {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Cargar archivo");
+    int userSelection = fileChooser.showOpenDialog(vista.getFrame());
+
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+        File fileToLoad = fileChooser.getSelectedFile();
+        String rutaArchivo = fileToLoad.getAbsolutePath();
+        cargarDatos(rutaArchivo);
+    }
+}
+
+
     private MatrizOrtogonal obtenerMatrizOrtogonal() {
         int numeroHoja = vista.getHojaSeleccionada();
         for (MatrizOrtogonal matriz : contenidoHojas) {

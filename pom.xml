@@ -11,4 +11,24 @@
         <maven.compiler.target>19</maven.compiler.target>
         <exec.mainClass>com.mycompany.pruebasproyecto3.PruebasProyecto3</exec.mainClass>
     </properties>
+    <build>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <mainClass>com.mycompany.pruebasproyecto3.PruebasProyecto3</mainClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
 </project>

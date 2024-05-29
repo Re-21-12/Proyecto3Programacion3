@@ -4,10 +4,7 @@
  */
 package com.mycompany.pruebasproyecto3.Modelos;
 
-/**
- *
- * @author victo
- */
+
 public class NodoOrtogonal {
     private int x; // Declara una variable privada x de tipo entero
     private int y; // Declara una variable privada y de tipo entero

@@ -4,10 +4,7 @@
  */
 package com.mycompany.pruebasproyecto3.Modelos;
 
-/**
- *
- * @author victo
- */
+
 import java.util.*;
 
 public class TablaHash {

@@ -4,10 +4,7 @@
  */
 package com.mycompany.pruebasproyecto3.Modelos;
 
-/**
- *
- * @author victo
- */
+
 // Esta lista contiene nodos hash osea los indices que contienen listas donde se almacenan finalmente los datos
 public class ListaHash {
 

@@ -18,6 +18,7 @@ public class VentanaController implements ActionListener {
     private Ventana vista;
     private ArrayList<MatrizOrtogonal> contenidoHojas = new ArrayList<>();
 
+    // Constructor que inicializa la vista y agrega una hoja al inicio
     public VentanaController(Ventana vista) {
         this.vista = vista;
         this.vista.setControlador(this);
@@ -26,9 +27,11 @@ public class VentanaController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Maneja el evento para crear una nueva hoja
         if (e.getSource() == vista.crearHoja) {
             agregarHoja();
         } else if (e.getSource() == vista.aplicar) {
+            // Maneja el evento para aplicar una función
             String funcion = vista.getFuncion();
 
             if (!funcion.isEmpty()) {
@@ -45,20 +48,25 @@ public class VentanaController implements ActionListener {
                 System.err.println("Error: No se encontraron datos en la función.");
             }
         } else if (e.getSource() == vista.rechazar) {
+            // Maneja el evento para rechazar la función
             vista.limpiarFuncion();
         }
 
+        // Maneja el evento para generar la tabla hash
         if (e.getSource() == vista.tablaHash) {
             generarTablaHash();
         }
+        // Maneja el evento para guardar los datos
         if (e.getSource() == vista.guardar) {
-            guardarDatosConDialogo(); // Llamar al método que abre el diálogo para guardar
+            guardarDatosConDialogo();
         }
+        // Maneja el evento para cargar los datos
         if (e.getSource() == vista.cargar) {
-            cargarDatosConDialogo(); // Llamar al método que abre el diálogo para cargar
+            cargarDatosConDialogo();
         }
     }
 
+    // Método para generar una tabla hash
     private void generarTablaHash() {
         int numero_buckets = solicitarCantidadBuckets();
         if (numero_buckets > 0) {
@@ -76,13 +84,14 @@ public class VentanaController implements ActionListener {
         }
     }
 
+    // Método para obtener los datos de la columna B
     private ArrayList<String> obtenerDatosColumnaB() {
         DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
         int rowCount = modelo.getRowCount();
         ArrayList<String> datos_columnaB = new ArrayList<>();
 
         for (int i = 0; i < rowCount; i++) {
-            Object valor = modelo.getValueAt(i, 1); // La columna B es el índice 1 (0 para la columna A, 1 para la columna B, etc.)
+            Object valor = modelo.getValueAt(i, 1);
 
             if (valor != null) {
                 datos_columnaB.add(valor.toString());
@@ -93,6 +102,7 @@ public class VentanaController implements ActionListener {
         return datos_columnaB;
     }
 
+    // Método para solicitar la cantidad de buckets para la tabla hash
     private int solicitarCantidadBuckets() {
         String input = JOptionPane.showInputDialog(vista.getFrame(), "Ingrese la cantidad de buckets:", "Cantidad de Buckets", JOptionPane.PLAIN_MESSAGE);
         try {
@@ -103,83 +113,78 @@ public class VentanaController implements ActionListener {
             return numBuckets;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(vista.getFrame(), "Entrada no válida. Por favor, ingrese un número entero positivo.", "Error", JOptionPane.ERROR_MESSAGE);
-            return -1; // Indica que se ha producido un error
+            return -1;
         }
     }
 
-public void cargarDatos(String rutaArchivo) {
-    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
-        Vector dataVector = (Vector) ois.readObject();
-        DefaultTableModel modelo = new DefaultTableModel(dataVector, 0); // Se inicia con 0 columnas
-        int columnCount = dataVector.isEmpty() ? 0 : ((Vector) dataVector.get(0)).size(); // Obtener el número de columnas
-        for (int i = 0; i < columnCount; i++) {
-            modelo.addColumn("Columna " + (i + 1)); // Agregar las columnas al modelo
+    // Método para cargar datos desde un archivo
+    public void cargarDatos(String rutaArchivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
+            Vector dataVector = (Vector) ois.readObject();
+            DefaultTableModel modelo = new DefaultTableModel(dataVector, 0);
+            int columnCount = dataVector.isEmpty() ? 0 : ((Vector) dataVector.get(0)).size();
+            for (int i = 0; i < columnCount; i++) {
+                modelo.addColumn("Columna " + (i + 1));
+            }
+            if (vista.getModeloHojaSeleccionada() != null) {
+                DefaultTableModel nuevoModelo = new DefaultTableModel(dataVector, columnCount);
+                vista.setModeloHojaSeleccionada(nuevoModelo);
+                System.out.println("Datos cargados correctamente desde " + rutaArchivo);
+            } else {
+                System.err.println("Error: No hay una hoja seleccionada para cargar los datos.");
+                JOptionPane.showMessageDialog(vista.getFrame(), "No hay una hoja seleccionada para cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(vista.getFrame(), "Error al cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        // Verificar si hay una hoja seleccionada actualmente
-        if (vista.getModeloHojaSeleccionada() != null) {
-            // Crear un nuevo modelo de tabla con los nuevos datos y establecerlo en la vista
-            DefaultTableModel nuevoModelo = new DefaultTableModel(dataVector, columnCount);
-            vista.setModeloHojaSeleccionada(nuevoModelo);
-            System.out.println("Datos cargados correctamente desde " + rutaArchivo);
-        } else {
-            System.err.println("Error: No hay una hoja seleccionada para cargar los datos.");
-            JOptionPane.showMessageDialog(vista.getFrame(), "No hay una hoja seleccionada para cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Método para guardar datos en un archivo
+    public void guardarDatos(String rutaArchivo) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
+            DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
+            int columnCount = modelo.getColumnCount();
+            Vector<String> columnIdentifiers = new Vector<>();
+            for (int i = 0; i < columnCount; i++) {
+                columnIdentifiers.add(modelo.getColumnName(i));
+            }
+            oos.writeObject(modelo.getDataVector());
+            oos.writeObject(columnIdentifiers);
+            System.out.println("Datos guardados correctamente en " + rutaArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(vista.getFrame(), "Error al guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (IOException | ClassNotFoundException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(vista.getFrame(), "Error al cargar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
 
+    // Método para abrir el diálogo de guardar archivo
+    public void guardarDatosConDialogo() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar archivo");
+        int userSelection = fileChooser.showSaveDialog(vista.getFrame());
 
-
-
-
-public void guardarDatos(String rutaArchivo) {
-    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
-        DefaultTableModel modelo = vista.getModeloHojaSeleccionada();
-        int columnCount = modelo.getColumnCount();
-        Vector<String> columnIdentifiers = new Vector<>();
-        for (int i = 0; i < columnCount; i++) {
-            columnIdentifiers.add(modelo.getColumnName(i));
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String rutaArchivo = fileToSave.getAbsolutePath();
+            guardarDatos(rutaArchivo);
         }
-        oos.writeObject(modelo.getDataVector()); // Guarda los datos de la tabla
-        oos.writeObject(columnIdentifiers); // Guarda los identificadores de columna
-        System.out.println("Datos guardados correctamente en " + rutaArchivo);
-    } catch (IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(vista.getFrame(), "Error al guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
 
+    // Método para abrir el diálogo de cargar archivo
+    public void cargarDatosConDialogo() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Cargar archivo");
+        int userSelection = fileChooser.showOpenDialog(vista.getFrame());
 
-
-public void guardarDatosConDialogo() {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Guardar archivo");
-    int userSelection = fileChooser.showSaveDialog(vista.getFrame());
-
-    if (userSelection == JFileChooser.APPROVE_OPTION) {
-        File fileToSave = fileChooser.getSelectedFile();
-        String rutaArchivo = fileToSave.getAbsolutePath();
-        guardarDatos(rutaArchivo);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToLoad = fileChooser.getSelectedFile();
+            String rutaArchivo = fileToLoad.getAbsolutePath();
+            cargarDatos(rutaArchivo);
+        }
     }
-}
 
-
-public void cargarDatosConDialogo() {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Cargar archivo");
-    int userSelection = fileChooser.showOpenDialog(vista.getFrame());
-
-    if (userSelection == JFileChooser.APPROVE_OPTION) {
-        File fileToLoad = fileChooser.getSelectedFile();
-        String rutaArchivo = fileToLoad.getAbsolutePath();
-        cargarDatos(rutaArchivo);
-    }
-}
-
-
+    // Método para obtener la matriz ortogonal seleccionada
     private MatrizOrtogonal obtenerMatrizOrtogonal() {
         int numeroHoja = vista.getHojaSeleccionada();
         for (MatrizOrtogonal matriz : contenidoHojas) {
@@ -190,6 +195,7 @@ public void cargarDatosConDialogo() {
         throw new Error("No se encontro la matriz");
     }
 
+    // Método para aplicar una función a las celdas seleccionadas
     private NodoOrtogonal aplicarFuncion(String operacion, String dato1x, String dato1y, String dato2x, String dato2y, String x, String y) {
         String resultado = "";
 
@@ -238,6 +244,7 @@ public void cargarDatosConDialogo() {
         return null;
     }
 
+    // Método para agregar una nueva hoja
     private void agregarHoja() {
         MatrizOrtogonal matrizOrtogonal = new MatrizOrtogonal(contenidoHojas.size());
         contenidoHojas.add(matrizOrtogonal);
@@ -293,6 +300,7 @@ public void cargarDatosConDialogo() {
         vista.agregarHoja(nuevoModelo, nuevaTabla, nuevoPanel);
     }
 
+    // Método para enviar cambios a la matriz ortogonal
     private void mandarCambios(NodoOrtogonal nodoOrtogonal, String estado, MatrizOrtogonal matrizOrtogonal) {
         if (nodoOrtogonal == null) {
             System.err.println("Error: Nodo ortogonal nulo.");

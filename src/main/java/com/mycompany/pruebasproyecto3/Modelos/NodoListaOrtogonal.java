@@ -4,10 +4,7 @@
  */
 package com.mycompany.pruebasproyecto3.Modelos;
 
-/**
- *
- * @author victo
- */
+
 public class NodoListaOrtogonal {
 
     private NodoOrtogonal cabeza; // Declara una variable privada cabeza del tipo NodoOrtogonal

@@ -4,10 +4,6 @@
  */
 package com.mycompany.pruebasproyecto3.Modelos;
 
-/**
- *
- * @author victo
- */
 public class MatrizOrtogonal {
 
     private int numeroHoja;

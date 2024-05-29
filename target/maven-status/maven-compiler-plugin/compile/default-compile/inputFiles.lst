@@ -1,6 +1,14 @@
-C:\Users\victo\OneDrive\Documentos\NetBeansProjects\PruebasProyecto3\src\main\java\com\mycompany\pruebasproyecto3\NodoListaOrtogonal.java
-C:\Users\victo\OneDrive\Documentos\NetBeansProjects\PruebasProyecto3\src\main\java\com\mycompany\pruebasproyecto3\NodoOrtogonal.java
-C:\Users\victo\OneDrive\Documentos\NetBeansProjects\PruebasProyecto3\src\main\java\com\mycompany\pruebasproyecto3\NodoLista.java
-C:\Users\victo\OneDrive\Documentos\NetBeansProjects\PruebasProyecto3\src\main\java\com\mycompany\pruebasproyecto3\PruebasProyecto3.java
-C:\Users\victo\OneDrive\Documentos\NetBeansProjects\PruebasProyecto3\src\main\java\com\mycompany\pruebasproyecto3\NodoCoordenada.java
-C:\Users\victo\OneDrive\Documentos\NetBeansProjects\PruebasProyecto3\src\main\java\com\mycompany\pruebasproyecto3\MatrizOrtogonal.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\MatrizOrtogonal.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\Nodo.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\NodoOrtogonal.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\TablaHash.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Controladores\MatrizOrtogonalController.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\NodoCoordenada.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\NodoListaOrtogonal.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\ListaHash.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Controladores\VentanaController.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\ListaEnlazada.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Vista\PruebasProyecto3.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Vista\Ventana.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\NodoLista.java
+C:\Users\jsalazar\OneDrive - BLP LEGAL\Documentos\NetBeansProjects\Proyecto3Programacion3\src\main\java\com\mycompany\pruebasproyecto3\Modelos\NodoHash.java

@@ -6,10 +6,7 @@ package com.mycompany.pruebasproyecto3.Modelos;
 
 import com.mycompany.pruebasproyecto3.Modelos.NodoCoordenada;
 
-/**
- *
- * @author victo
- */
+
 public class NodoLista {
 
     private NodoCoordenada cabeza; // declaramos un nodo que apunta al inicio de la lista

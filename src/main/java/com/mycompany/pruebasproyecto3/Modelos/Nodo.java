@@ -4,10 +4,7 @@
  */
 package com.mycompany.pruebasproyecto3.Modelos;
 
-/**
- *
- * @author victo
- */
+
 public class Nodo {
  private int dato;
  private Nodo siguiente;

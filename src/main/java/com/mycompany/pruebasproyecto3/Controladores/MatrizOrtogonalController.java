@@ -4,10 +4,7 @@
  */
 package com.mycompany.pruebasproyecto3.Controladores;
 
-/**
- *
- * @author victo
- */
+
 public class MatrizOrtogonalController {
     
 }
